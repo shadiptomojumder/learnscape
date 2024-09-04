@@ -23,10 +23,11 @@ export default auth((req) => {
 
     console.log({ isPublicRoute });
 
-    if (!isAuthenticated && !isPublicRoute)
+    if (!isAuthenticated && !isPublicRoute) {
         return Response.redirect(new URL(LOGIN, nextUrl));
+    }
 });
 
 export const config = {
-    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+    matcher: ["/((?!.+\\.[\\w]+$|_next|api).*)", "/", "/trpc/(.*)"],
 };

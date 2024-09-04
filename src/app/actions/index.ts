@@ -10,7 +10,7 @@ export async function ceredntialLogin(formData: FormData) {
             redirect: false,
         });
         return response;
-    } catch (error) {
+} catch (error) {
         throw new Error(error?.toString());
     }
 }

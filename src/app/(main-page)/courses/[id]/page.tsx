@@ -13,9 +13,7 @@ const SingleCoursePage: React.FC<{ params: { id: string } }> = async ({ params: 
     return (
         <>
             <CourseDetailsIntro
-                title={course?.title}
-                subtitle={course?.subtitle}
-                thumbnail={course?.thumbnail} />
+                course={course} />
 
             <CourseDetails course={course} />
 
