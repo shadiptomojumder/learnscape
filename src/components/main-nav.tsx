@@ -24,12 +24,23 @@ export function MainNav({ items, children }: any) {
 
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [loginSession, setLoginSession] = useState<any>(null);
-
+    const [loggedInUser, setLoggedInUser] = useState<any>(null);
     console.log(loginSession);
 
     useEffect(() => {
-        console.log("test");
         setLoginSession(session);
+        async function fetchMe() {
+            try {
+                const response = await fetch("/api/me");
+                const data = await response.json();
+                console.log(data);
+                setLoggedInUser(data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        fetchMe();
     }, [session]);
 
     return (
@@ -115,6 +126,14 @@ export function MainNav({ items, children }: any) {
                         <DropdownMenuItem className="cursor-pointer" asChild>
                             <Link href="/account">Profile</Link>
                         </DropdownMenuItem>
+                        {loggedInUser?.role === "instructor" && (
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                asChild
+                            >
+                                <Link href="/dashboard">Dashboard</Link>
+                            </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem className="cursor-pointer" asChild>
                             <Link href="/account/enrolled-courses">
                                 My Courses

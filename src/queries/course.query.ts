@@ -82,14 +82,36 @@ export async function getCourseDetailsByInstructor(instructorId: any) {
         })
     );
 
-    const totalEnrollments = enrollments.reduce((item:any, currentValue) => {
+    function groupBy(arr: any, keyFn: any) {
+        return arr.reduce((acc: any, item: any) => {
+            const key = keyFn(item);
+            if (!acc[key]) {
+                acc[key] = [];
+            }
+            acc[key].push(item);
+            return acc;
+        }, {});
+    }
+
+    const groupedByCourses = groupBy(
+        enrollments.flat(),
+        ({ course }: { course: any }) => course
+    );
+    console.log("groupedByCourses is:", groupedByCourses);
+
+    const totalRevenue = courses.reduce((acc, course: any) => {
+        return acc + groupedByCourses[course._id].length * course.price;
+    }, 0);
+
+    console.log("totalRevenue is:", totalRevenue);
+
+    const totalEnrollments = enrollments.reduce((item: any, currentValue) => {
         return item.length + currentValue.length;
     });
 
     const testimonials = await Promise.all(
         courses.map(async (course) => {
-            const testimonial = await getTestimonialsForCourse(
-                course._id )
+            const testimonial = await getTestimonialsForCourse(course._id);
             return testimonial;
         })
     );
@@ -100,11 +122,12 @@ export async function getCourseDetailsByInstructor(instructorId: any) {
             return acc + obj.rating;
         }, 0) / totalTestimonials.length;
 
-    console.log("testimonials Array is:",testimonials);
+    //console.log("testimonials Array is:", testimonials);
     return {
         courses: courses.length,
         enrollments: totalEnrollments,
         reviews: totalTestimonials.length,
         ratings: avgRating.toPrecision(2),
+        revenue: totalRevenue,
     };
 }

@@ -12,6 +12,9 @@ const AccountSidebar = async () => {
         redirect("/login");
     }
 
+    console.log("The session is:",session);
+    
+
     const loggedInUser = await getUserByEmail(session?.user?.email ?? "");
     console.log("loggedInUser is:", loggedInUser);
 

@@ -18,7 +18,7 @@ const CourseDetailsIntro = async ({ course }: any) => {
         loggedInUser?.id
     );
 
-    console.log("course is 21:",course);
+    //console.log("course is 21:",course);
     return (
         <div className="overflow-x-hidden  grainy">
             <section className="pt-12  sm:pt-16">
